@@ -11,7 +11,7 @@ import Events from "./Pages/Events";
 
 function App() {
   return (
-    <div className="App">
+    <div className="AppContainer">
       <Router>
         <>
           <NavMenu></NavMenu>

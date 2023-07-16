@@ -8,8 +8,13 @@
   background-color: rgb(8, 2, 43);
   height: 80px;
   display: flex;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
+}
+
+.nav-bar-title {
+  color: white;
+  font-size: 30px;
 }
 
 .nav-bar-hamburger-link,

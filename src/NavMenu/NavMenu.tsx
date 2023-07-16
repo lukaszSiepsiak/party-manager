@@ -10,26 +10,13 @@ import { NavMenuData } from "./NavMenuData";
 import DesktopNavItem from "./DesktopNavItem";
 
 const NavMenu = () => {
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const toggleSidebar = () => setIsSideBarOpen(!isSideBarOpen);
-
   return (
     <div>
       <div className="nav-bar">
-        {!isSideBarOpen ? (
-          <Link to="#" className="nav-bar-hamburger-link">
-            <FaIcons.FaBars onClick={toggleSidebar}></FaIcons.FaBars>
-          </Link>
-        ) : (
-          <Link to="#" className="nav-menu-bar-close-link">
-            <AiIcons.AiOutlineClose
-              onClick={toggleSidebar}
-            ></AiIcons.AiOutlineClose>
-          </Link>
-        )}
+        <h1 className="nav-bar-title">Anonymous Santa</h1>
       </div>
-      <nav className={isSideBarOpen ? "nav-menu active" : "nav-menu"}>
-        <ul className="nav-menu-ul" onClick={toggleSidebar}>
+      <nav className={"nav-menu active"}>
+        <ul className="nav-menu-ul">
           {NavMenuData.map((item, index) => (
             <DesktopNavItem
               key={index}
