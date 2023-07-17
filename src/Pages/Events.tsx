@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
-import SignUpForm from "../Forms/SignUpForm";
-import SignInForm from "../Forms/SignInForm";
-import JoinToEventForm from "../Forms/JoinToEventForm";
-import AddEventForm from "../Forms/AddEventForm";
+import SignUpForm from "../Components/Forms/SignUpForm";
+import SignInForm from "../Components/Forms/SignInForm";
+import JoinToEventForm from "../Components/Forms/JoinToEventForm";
+import AddEventForm from "../Components/Forms/AddEventForm";
 import EventItem, {
   EventItemParticipantsType,
   EventItemPropsType,
