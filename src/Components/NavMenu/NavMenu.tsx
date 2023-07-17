@@ -6,10 +6,20 @@ import * as AiIcons from "react-icons/ai";
 
 import "./NavMenu.css";
 
-import { NavMenuData } from "./NavMenuData";
+import { LoggedInNavMenuData, NotLoggedInNavMenuData } from "./NavMenuData";
 import DesktopNavItem from "./DesktopNavItem";
 
-const NavMenu = () => {
+const NavMenu = ({ token }: { token: string }) => {
+  const loggedInNavMenuItems = () =>
+    LoggedInNavMenuData.map((item, index) => (
+      <DesktopNavItem key={index} item={item} index={index}></DesktopNavItem>
+    ));
+
+  const notLoggedInNavMenuItems = () =>
+    NotLoggedInNavMenuData.map((item, index) => (
+      <DesktopNavItem key={index} item={item} index={index}></DesktopNavItem>
+    ));
+
   return (
     <div>
       <div className="nav-bar">
@@ -17,13 +27,7 @@ const NavMenu = () => {
       </div>
       <nav className={"nav-menu active"}>
         <ul className="nav-menu-ul">
-          {NavMenuData.map((item, index) => (
-            <DesktopNavItem
-              key={index}
-              item={item}
-              index={index}
-            ></DesktopNavItem>
-          ))}
+          {token ? loggedInNavMenuItems() : notLoggedInNavMenuItems()}
         </ul>
       </nav>
     </div>

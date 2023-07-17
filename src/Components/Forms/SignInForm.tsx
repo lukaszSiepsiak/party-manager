@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
 import "./Form.css";
+import { post } from "../../Api/axios";
+import useToken from "../../Hooks/useToken";
 
 type SignInFormProps = {
   formCallback?: (data: SignInFormDataType) => void;
@@ -12,11 +15,19 @@ type SignInFormDataType = {
   password: string;
 };
 
+type SignInFormDataDto = {
+  username: string;
+  password: string;
+};
+
+const LOGIN_URL = "/api/v1/auth/login";
+
 const SignInForm = ({ formCallback }: SignInFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     defaultValues: {
       email: "",
@@ -24,12 +35,31 @@ const SignInForm = ({ formCallback }: SignInFormProps) => {
     } as SignInFormDataType,
   });
 
+  const navigate = useNavigate();
+  const { token, setToken } = useToken();
+
   const onSubmit = async (data: any) => {
     console.log("onSubmit", data);
     const { email, password } = data;
 
-    if (formCallback) {
-      formCallback({ email, password });
+    const dataToSend: SignInFormDataDto = {
+      username: email,
+      password: password,
+    };
+
+    try {
+      await post(LOGIN_URL, dataToSend).then((responseData) => {
+        if (responseData) {
+          console.log("responseData:", JSON.stringify(responseData));
+
+          setToken(responseData.token);
+
+          reset();
+          navigate("/");
+        }
+      });
+    } catch (error: unknown) {
+      console.log("error", error);
     }
   };
 

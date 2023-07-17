@@ -1,8 +1,10 @@
-import { useRef } from "react";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 
 import "./Form.css";
+import { post } from "../../Api/axios";
 
 type SignUpFormProps = {
   formCallback?: (data: SignUpFormDataType) => void;
@@ -16,12 +18,23 @@ type SignUpFormDataType = {
   confirmPassword: string;
 };
 
+type SignUpFormDataDto = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
+const REGISTER_URL = "/register";
+
 const SignUpForm = ({ formCallback }: SignUpFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm({
     defaultValues: {
       name: "",
@@ -33,13 +46,38 @@ const SignUpForm = ({ formCallback }: SignUpFormProps) => {
   });
   const password = useRef({});
   password.current = watch("password", "");
+  const navigate = useNavigate();
 
   const onSubmit = async (data: any) => {
     console.log("onSubmit", data);
-    const { email, name, surname, password, confirmPassword } = data;
+    const {
+      email,
+      name,
+      surname,
+      password,
+      confirmPassword,
+    }: SignUpFormDataType = data;
 
-    if (formCallback) {
-      formCallback({ email, name, surname, password, confirmPassword });
+    const dataToSend: SignUpFormDataDto = {
+      //TODO: Fit it to server needs
+      firstName: name,
+      lastName: surname,
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
+    };
+
+    try {
+      await post(REGISTER_URL, dataToSend, true).then((responseData) => {
+        if (responseData) {
+          console.log("responseData:", JSON.stringify(responseData));
+
+          reset();
+          navigate("/signin");
+        }
+      });
+    } catch (error: unknown) {
+      console.log("error", error);
     }
   };
 
