@@ -9,6 +9,7 @@ export type NavMenuDataType = {
   path: string;
   icon: ReactElement;
   cName: string;
+  logOut?: boolean;
 };
 
 export const LoggedInNavMenuData: NavMenuDataType[] = [
@@ -29,6 +30,13 @@ export const LoggedInNavMenuData: NavMenuDataType[] = [
     path: "/profile",
     icon: <FaIcons.FaUser />,
     cName: "nav-menu-li-link-item",
+  },
+  {
+    title: "Sign Out",
+    path: "/",
+    icon: <FaIcons.FaSignOutAlt />,
+    cName: "nav-menu-li-link-item",
+    logOut: true,
   },
 ];
 

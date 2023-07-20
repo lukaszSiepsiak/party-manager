@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import "./Form.css";
 import { post } from "../../Api/axios";
-import useToken from "../../Hooks/useToken";
+import { useAuth } from "../../Context/Auth/AuthContextPovider";
 
 type SignInFormProps = {
   formCallback?: (data: SignInFormDataType) => void;
@@ -36,7 +36,7 @@ const SignInForm = ({ formCallback }: SignInFormProps) => {
   });
 
   const navigate = useNavigate();
-  const { token, setToken } = useToken();
+  const { logIn } = useAuth();
 
   const onSubmit = async (data: any) => {
     console.log("onSubmit", data);
@@ -50,10 +50,8 @@ const SignInForm = ({ formCallback }: SignInFormProps) => {
     try {
       await post(LOGIN_URL, dataToSend).then((responseData) => {
         if (responseData) {
-          console.log("responseData:", JSON.stringify(responseData));
-
-          setToken(responseData.token);
-
+          console.log("responseData:", responseData);
+          logIn({ token: responseData });
           reset();
           navigate("/");
         }
