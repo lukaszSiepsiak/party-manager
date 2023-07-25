@@ -48,13 +48,14 @@ const SignInForm = ({ formCallback }: SignInFormProps) => {
     };
 
     try {
+      logIn({ token: "responseData" });
       await post(LOGIN_URL, dataToSend).then((responseData) => {
-        if (responseData) {
-          console.log("responseData:", responseData);
-          logIn({ token: responseData });
-          reset();
-          navigate("/");
-        }
+        // if (responseData) {
+        //   console.log("responseData:", responseData);
+        //   logIn({ token: responseData });
+        //   reset();
+        //   navigate("/");
+        // }
       });
     } catch (error: unknown) {
       console.log("error", error);

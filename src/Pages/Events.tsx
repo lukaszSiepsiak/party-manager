@@ -9,7 +9,7 @@ import EventItem, {
   EventItemPropsType,
 } from "../Components/EventItem/EventItem";
 
-import image from "../Components/EventItem/partyimage.jpg";
+import image from "../Assets/partyimage.jpg";
 
 const mockData: EventItemPropsType[] = [
   {
