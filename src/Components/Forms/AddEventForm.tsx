@@ -9,16 +9,16 @@ type AddEventFormProps = {
   closeForm?: () => void;
 };
 
-type AddEventFormDataType = {
+export type AddEventFormDataType = {
   name: string;
   date: string;
   peopleAmount: number;
   budget: number;
   currency: string;
-  participants?: AddEventFormParticipantsDataType[];
+  participants: AddEventFormParticipantsDataType[];
 };
 
-type AddEventFormParticipantsDataType = {
+export type AddEventFormParticipantsDataType = {
   participantName: string;
   participantSurname: string;
   participantEmail: string;
@@ -30,7 +30,7 @@ const AddEventForm = ({ formCallback, closeForm }: AddEventFormProps) => {
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm<AddEventFormDataType>({});
+  } = useForm<AddEventFormDataType>();
 
   const { fields, append, remove } = useFieldArray({
     name: "participants",
@@ -39,10 +39,21 @@ const AddEventForm = ({ formCallback, closeForm }: AddEventFormProps) => {
 
   const onSubmit = async (data: any) => {
     console.log("onSubmit", data);
-    const { name, date, peopleAmount, budget, currency } = data;
+    const { name, date, peopleAmount, budget, currency, participants } = data;
 
     if (formCallback) {
-      formCallback({ name, date, peopleAmount, budget, currency });
+      formCallback({
+        name,
+        date,
+        peopleAmount,
+        budget,
+        currency,
+        participants,
+      });
+
+      if (closeForm) {
+        closeForm();
+      }
     }
   };
 
@@ -153,27 +164,52 @@ const AddEventForm = ({ formCallback, closeForm }: AddEventFormProps) => {
                   <div className="FormAddEventPeopleInputContainer">
                     <input
                       className="FormInput FormAddEventPeopleInput"
-                      {...register(`participants.${index}.participantName`, {})}
+                      {...register(`participants.${index}.participantName`, {
+                        required: "Please enter name.",
+                        validate: {
+                          minLength: (v) =>
+                            v.length >= 3 ||
+                            "Name must have at least 3 letters",
+                          matchPattern: (v) =>
+                            /^[a-zA-Z]+$/.test(v) ||
+                            "Name must contain only letters",
+                        },
+                      })}
                       placeholder="Name"
                     />
                   </div>
                   <div className="FormAddEventPeopleInputContainer">
                     <input
                       className="FormInput FormAddEventPeopleInput"
-                      {...register(
-                        `participants.${index}.participantSurname`,
-                        {}
-                      )}
+                      {...register(`participants.${index}.participantSurname`, {
+                        required: "Please enter surname.",
+                        validate: {
+                          minLength: (v) =>
+                            v.length >= 3 ||
+                            "Surname must have at least 3 letters",
+                          matchPattern: (v) =>
+                            /^[a-zA-Z]+$/.test(v) ||
+                            "Name must contain only letters",
+                        },
+                      })}
                       placeholder="Surname"
                     />
                   </div>
                   <div className="FormAddEventPeopleInputContainer">
                     <input
                       className="FormInput FormAddEventPeopleInput"
-                      {...register(
-                        `participants.${index}.participantEmail`,
-                        {}
-                      )}
+                      {...register(`participants.${index}.participantEmail`, {
+                        required: "Please enter your email.",
+                        validate: {
+                          maxLength: (v) =>
+                            v.length <= 50 ||
+                            "The email should have at most 50 characters",
+                          matchPattern: (v) =>
+                            /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
+                              v
+                            ) || "Email address must be a valid address",
+                        },
+                      })}
                       placeholder="Email"
                     />
                   </div>
@@ -189,7 +225,7 @@ const AddEventForm = ({ formCallback, closeForm }: AddEventFormProps) => {
           </div>
         </div>
         <div className="FormSubmitButtonContainer">
-          <input className="FormSubmitButton" type="submit" value="Add" />
+          <input className="FormSubmitButton" type="submit" value="AddEvent" />
           <input
             readOnly
             className="FormSubmitButton"

@@ -9,6 +9,7 @@ export type EventItemPropsType = {
   currency: string;
   picture: string;
   participants?: EventItemParticipantsType[];
+  organizerId?: string;
   deleteCallback?: (id: string) => void;
   openParticipantsCallback?: (id: string) => void;
 };
@@ -17,7 +18,11 @@ export type EventItemParticipantsType = {
   participantName: string;
   participantSurname: string;
   participantEmail: string;
-  takePartInInEvent: boolean;
+  takePartInInEvent?: boolean;
+  eventPassword?: string;
+  giftReceiver?: string;
+  // event: EventDto;
+  // user: UserDto;
 };
 
 const EventItem = ({
