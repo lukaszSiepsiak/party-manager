@@ -71,8 +71,6 @@ const useAuthContext = (
     []
   );
 
-  console.log("AuthContext state", state);
-
   return { state, logIn, logOut };
 };
 

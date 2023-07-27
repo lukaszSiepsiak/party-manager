@@ -49,7 +49,6 @@ const SignUpForm = ({ formCallback }: SignUpFormProps) => {
   const navigate = useNavigate();
 
   const onSubmit = async (data: any) => {
-    console.log("onSubmit", data);
     const {
       email,
       name,
@@ -70,8 +69,6 @@ const SignUpForm = ({ formCallback }: SignUpFormProps) => {
     try {
       await post(REGISTER_URL, dataToSend, true).then((responseData) => {
         if (responseData) {
-          console.log("responseData:", JSON.stringify(responseData));
-
           reset();
           navigate("/signin");
         }

@@ -13,7 +13,7 @@ import EventItem, {
 } from "../Components/EventItem/EventItem";
 
 import { EventDto, InvitationDto } from "../Dto/DtoProvider";
-import { post } from "../Api/axios";
+import { post, _delete } from "../Api/axios";
 import { useAuth } from "../Context/Auth/AuthContextPovider";
 
 import pic1 from "../Assets/pic1.jpg";
@@ -32,140 +32,142 @@ const drawLotPictures = () => {
 
 const GET_EVENTS_URL = "/user-events";
 const ADD_EVENT_URL = "/event/add";
+const DELETE_EVENT_URL = "/delete";
 
-// const mockData: EventItemPropsType[] = [
-//   {
-//     id: "1",
-//     name: "Cos tam",
-//     budget: 1000,
-//     currency: "PLN",
-//     date: "06.12.2023",
-//     peopleAmount: 10,
-//     picture: image,
-//     participants: [
-//       {
-//         participantName: "ParticipantName",
-//         participantSurname: "ParticipantSurname",
-//         participantEmail: "ParticipantEmail",
-//         takePartInInEvent: true,
-//       },
-//       {
-//         participantName: "ParticipantName",
-//         participantSurname: "ParticipantSurname",
-//         participantEmail: "ParticipantEmail",
-//         takePartInInEvent: true,
-//       },
-//       {
-//         participantName: "ParticipantName",
-//         participantSurname: "ParticipantSurname",
-//         participantEmail: "ParticipantEmail",
-//         takePartInInEvent: true,
-//       },
-//       {
-//         participantName: "ParticipantName",
-//         participantSurname: "ParticipantSurname",
-//         participantEmail: "ParticipantEmail",
-//         takePartInInEvent: true,
-//       },
-//       {
-//         participantName: "ParticipantName",
-//         participantSurname: "ParticipantSurname",
-//         participantEmail: "ParticipantEmail",
-//         takePartInInEvent: true,
-//       },
-//       {
-//         participantName: "ParticipantName",
-//         participantSurname: "ParticipantSurname",
-//         participantEmail: "ParticipantEmail",
-//         takePartInInEvent: true,
-//       },
-//       {
-//         participantName: "ParticipantName",
-//         participantSurname: "ParticipantSurname",
-//         participantEmail: "ParticipantEmail",
-//         takePartInInEvent: true,
-//       },
-//       {
-//         participantName: "ParticipantName",
-//         participantSurname: "ParticipantSurname",
-//         participantEmail: "ParticipantEmail",
-//         takePartInInEvent: true,
-//       },
-//     ],
-//   },
-//   {
-//     id: "9",
-//     name: "Cos tam",
-//     budget: 1000,
-//     currency: "PLN",
-//     date: "06.12.2023",
-//     peopleAmount: 10,
-//     picture: image,
-//   },
-//   {
-//     id: "8",
-//     name: "Cos tam",
-//     budget: 1000,
-//     currency: "PLN",
-//     date: "06.12.2023",
-//     peopleAmount: 10,
-//     picture: image,
-//   },
-//   {
-//     id: "7",
-//     name: "Cos tam",
-//     budget: 1000,
-//     currency: "PLN",
-//     date: "06.12.2023",
-//     peopleAmount: 10,
-//     picture: image,
-//   },
-//   {
-//     id: "6",
-//     name: "Cos tam",
-//     budget: 1000,
-//     currency: "PLN",
-//     date: "06.12.2023",
-//     peopleAmount: 10,
-//     picture: image,
-//   },
-//   {
-//     id: "5",
-//     name: "Cos tam",
-//     budget: 1000,
-//     currency: "PLN",
-//     date: "06.12.2023",
-//     peopleAmount: 10,
-//     picture: image,
-//   },
-//   {
-//     id: "4",
-//     name: "Cos tam",
-//     budget: 1000,
-//     currency: "PLN",
-//     date: "06.12.2023",
-//     peopleAmount: 10,
-//     picture: image,
-//   },
-//   {
-//     id: "3",
-//     name: "Cos tam",
-//     budget: 1000,
-//     currency: "PLN",
-//     date: "06.12.2023",
-//     peopleAmount: 10,
-//     picture: image,
-//   },
-//   {
-//     id: "2",
-//     name: "Cos tam",
-//     budget: 1000,
-//     currency: "PLN",
-//     date: "06.12.2023",
-//     peopleAmount: 10,
-//     picture: image,
-//   },
-// ];
+const mockData: EventItemPropsType[] = [
+  {
+    id: "1",
+    name: "Cos tam",
+    budget: 1000,
+    currency: "PLN",
+    date: "06.12.2023",
+    peopleAmount: 10,
+    picture: drawLotPictures(),
+    organizerId: "responseData",
+    participants: [
+      {
+        participantName: "ParticipantName",
+        participantSurname: "ParticipantSurname",
+        participantEmail: "ParticipantEmail",
+        takePartInInEvent: false,
+      },
+      {
+        participantName: "ParticipantName",
+        participantSurname: "ParticipantSurname",
+        participantEmail: "ParticipantEmail",
+        takePartInInEvent: true,
+      },
+      {
+        participantName: "ParticipantName",
+        participantSurname: "ParticipantSurname",
+        participantEmail: "ParticipantEmail",
+        takePartInInEvent: true,
+      },
+      {
+        participantName: "ParticipantName",
+        participantSurname: "ParticipantSurname",
+        participantEmail: "ParticipantEmail",
+        takePartInInEvent: true,
+      },
+      {
+        participantName: "ParticipantName",
+        participantSurname: "ParticipantSurname",
+        participantEmail: "ParticipantEmail",
+        takePartInInEvent: true,
+      },
+      {
+        participantName: "ParticipantName",
+        participantSurname: "ParticipantSurname",
+        participantEmail: "ParticipantEmail",
+        takePartInInEvent: true,
+      },
+      {
+        participantName: "ParticipantName",
+        participantSurname: "ParticipantSurname",
+        participantEmail: "ParticipantEmail",
+        takePartInInEvent: true,
+      },
+      {
+        participantName: "ParticipantName",
+        participantSurname: "ParticipantSurname",
+        participantEmail: "ParticipantEmail",
+        takePartInInEvent: true,
+      },
+    ],
+  },
+  {
+    id: "9",
+    name: "Cos tam",
+    budget: 1000,
+    currency: "PLN",
+    date: "06.12.2023",
+    peopleAmount: 10,
+    picture: drawLotPictures(),
+  },
+  {
+    id: "8",
+    name: "Cos tam",
+    budget: 1000,
+    currency: "PLN",
+    date: "06.12.2023",
+    peopleAmount: 10,
+    picture: drawLotPictures(),
+  },
+  {
+    id: "7",
+    name: "Cos tam",
+    budget: 1000,
+    currency: "PLN",
+    date: "06.12.2023",
+    peopleAmount: 10,
+    picture: drawLotPictures(),
+  },
+  {
+    id: "6",
+    name: "Cos tam",
+    budget: 1000,
+    currency: "PLN",
+    date: "06.12.2023",
+    peopleAmount: 10,
+    picture: drawLotPictures(),
+  },
+  {
+    id: "5",
+    name: "Cos tam",
+    budget: 1000,
+    currency: "PLN",
+    date: "06.12.2023",
+    peopleAmount: 10,
+    picture: drawLotPictures(),
+  },
+  {
+    id: "4",
+    name: "Cos tam",
+    budget: 1000,
+    currency: "PLN",
+    date: "06.12.2023",
+    peopleAmount: 10,
+    picture: drawLotPictures(),
+  },
+  {
+    id: "3",
+    name: "Cos tam",
+    budget: 1000,
+    currency: "PLN",
+    date: "06.12.2023",
+    peopleAmount: 10,
+    picture: drawLotPictures(),
+  },
+  {
+    id: "2",
+    name: "Cos tam",
+    budget: 1000,
+    currency: "PLN",
+    date: "06.12.2023",
+    peopleAmount: 10,
+    picture: drawLotPictures(),
+  },
+];
 
 const Events: React.FC = () => {
   const { token } = useAuth();
@@ -177,9 +179,8 @@ const Events: React.FC = () => {
   const [openParticipantsModal, setOpenParticipantsModal] =
     useState<boolean>(false);
 
-  const [events, setEvents] = useState<EventItemPropsType[]>([]);
-  const [currentEventParticipantsId, setCurrentEventParticipantsId] =
-    useState<string>("");
+  const [events, setEvents] = useState<EventItemPropsType[]>(mockData);
+  const [currentEventId, setCurrentEventId] = useState<string>("");
 
   //JOIN TO EVENT PART
   const joinToEventButtonClicked = () => {
@@ -246,7 +247,7 @@ const Events: React.FC = () => {
         });
     };
 
-    addEvents();
+    // addEvents();
   };
 
   const closeAddEventButtonClicked = () => {
@@ -254,14 +255,34 @@ const Events: React.FC = () => {
   };
 
   const deleteEventCallback = (id: string) => {
-    //TODO: delete event
+    try {
+      const deleteEvent = async () => {
+        await _delete(`${DELETE_EVENT_URL}/${id}/${token}`)
+          .then((responseData: any) => {
+            if (responseData) {
+              const deleteEventsArray = events.filter(
+                (event) => event.id !== id
+              );
+
+              setEvents(deleteEventsArray);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      };
+
+      deleteEvent();
+    } catch (error: unknown) {
+      console.log("error", error);
+    }
   };
 
   const openParticipantsCallback = (id: string) => {
     setOpenParticipantsModal(true);
 
     if (id) {
-      setCurrentEventParticipantsId(id);
+      setCurrentEventId(id);
     }
   };
 
@@ -314,12 +335,21 @@ const Events: React.FC = () => {
     } catch (error: unknown) {
       console.log("error", error);
     }
-  }, [events]);
+  }, [events, token]);
 
   const getFlickingItems = () => {
     //TODO: when fetch and setState, build EventItem and render it from state(events)
     return events.map((data, index) => {
-      const { id, budget, currency, date, name, peopleAmount, picture } = data;
+      const {
+        id,
+        budget,
+        currency,
+        date,
+        name,
+        peopleAmount,
+        picture,
+        organizerId,
+      } = data;
       return (
         <EventItem
           id={id}
@@ -330,6 +360,7 @@ const Events: React.FC = () => {
           name={name}
           peopleAmount={peopleAmount}
           picture={picture}
+          organizerId={organizerId}
           deleteCallback={deleteEventCallback}
           openParticipantsCallback={openParticipantsCallback}
         ></EventItem>
@@ -341,7 +372,7 @@ const Events: React.FC = () => {
     let participants: EventItemParticipantsType[] = [];
 
     events.map((eventItem) => {
-      if (eventItem.id === currentEventParticipantsId) {
+      if (eventItem.id === currentEventId) {
         participants = eventItem.participants as EventItemParticipantsType[];
       }
     });
@@ -351,6 +382,11 @@ const Events: React.FC = () => {
 
   const allCurrentParticipantsTakePartIn = () => {
     const currentParticipants = getCurrentParticipants();
+
+    if (currentParticipants.length < 1) {
+      return false;
+    }
+
     const allTakePartIn = currentParticipants.every(
       (participant) => participant.takePartInInEvent === true
     );
@@ -401,37 +437,41 @@ const Events: React.FC = () => {
           <div className="EventsParticipantsModalContainer">
             <h1 className="EventsParticipantsModalTitle">Participants</h1>
             <div className="EventsParticipantsModalItemsContainer">
-              {getCurrentParticipants().map((participant, index) => {
-                return (
-                  <div
-                    className="EventsParticipantsModalItemContainer"
-                    key={index}
-                  >
-                    <input
-                      readOnly
-                      className="EventsParticipantsModalItemInput"
-                      value={participant.participantName}
-                    />
-                    <input
-                      readOnly
-                      className="EventsParticipantsModalItemInput"
-                      value={participant.participantSurname}
-                    />
-                    <input
-                      readOnly
-                      className="EventsParticipantsModalItemInput"
-                      value={participant.participantEmail}
-                    />
-                    <button
-                      className={
-                        participant.takePartInInEvent
-                          ? "EventsParticipantsModalItemTakePartInButton"
-                          : "EventsParticipantsModalItemNotTakePartInButton"
-                      }
-                    ></button>
-                  </div>
-                );
-              })}
+              {getCurrentParticipants().length ? (
+                getCurrentParticipants().map((participant, index) => {
+                  return (
+                    <div
+                      className="EventsParticipantsModalItemContainer"
+                      key={index}
+                    >
+                      <input
+                        readOnly
+                        className="EventsParticipantsModalItemInput"
+                        value={participant.participantName}
+                      />
+                      <input
+                        readOnly
+                        className="EventsParticipantsModalItemInput"
+                        value={participant.participantSurname}
+                      />
+                      <input
+                        readOnly
+                        className="EventsParticipantsModalItemInput"
+                        value={participant.participantEmail}
+                      />
+                      <button
+                        className={
+                          participant.takePartInInEvent
+                            ? "EventsParticipantsModalItemTakePartInButton"
+                            : "EventsParticipantsModalItemNotTakePartInButton"
+                        }
+                      ></button>
+                    </div>
+                  );
+                })
+              ) : (
+                <h3>No data found!</h3>
+              )}
             </div>
             <div className="EventsParticipantsModalButtonsContainer">
               <button

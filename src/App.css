@@ -156,9 +156,11 @@
   border: none;
   outline: none;
 }
+
 .EventsParticipantsModalDrawLotsButton:disabled,
 .EventsParticipantsModalDrawLotsButton[disabled="true"] {
-  background: rgba(0, 0, 0, 0.5);
+  opacity: 0.5;
+  cursor: default;
   pointer-events: none;
 }
 

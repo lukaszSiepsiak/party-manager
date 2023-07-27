@@ -39,7 +39,6 @@ const SignInForm = ({ formCallback }: SignInFormProps) => {
   const { logIn } = useAuth();
 
   const onSubmit = async (data: any) => {
-    console.log("onSubmit", data);
     const { email, password } = data;
 
     const dataToSend: SignInFormDataDto = {

@@ -44,8 +44,8 @@
   margin-bottom: 5px;
 }
 
-.EventsIteDeleteButton,
-.EventsIteParticipantsButton {
+.EventsItemDeleteButton,
+.EventsItemParticipantsButton {
   background-color: rgb(8, 2, 43);
   color: whitesmoke;
   height: 30pt;
@@ -56,7 +56,16 @@
   outline: none;
 }
 
-.EventsIteDeleteButton {
+.EventsItemDeleteButton:disabled,
+.EventsItemDeleteButton[disabled="true"],
+.EventsItemParticipantsButton:disabled,
+.EventsItemParticipantsButton[disabled="true"] {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+.EventsItemDeleteButton {
   background-color: red;
 }
 

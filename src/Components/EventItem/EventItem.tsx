@@ -1,3 +1,4 @@
+import { useAuth } from "../../Context/Auth/AuthContextPovider";
 import "./EventItem.css";
 
 export type EventItemPropsType = {
@@ -35,7 +36,10 @@ const EventItem = ({
   picture,
   deleteCallback,
   openParticipantsCallback,
+  organizerId,
 }: EventItemPropsType) => {
+  const { token } = useAuth();
+
   const deleteEvent = () => {
     //TODO: fetch delete event and remove this from DOM
     //TODO: if delete request is done -> delete from DOM
@@ -54,12 +58,17 @@ const EventItem = ({
         {picture ? <img alt="eventPicture" src={picture} /> : <p>No picture</p>}
         <div className="EventItemButtonsContainer">
           <button
-            className="EventsIteParticipantsButton"
+            className="EventsItemParticipantsButton"
+            disabled={organizerId === token ? false : true}
             onClick={openParticipants}
           >
             Participants
           </button>
-          <button className="EventsIteDeleteButton" onClick={deleteEvent}>
+          <button
+            className="EventsItemDeleteButton"
+            disabled={organizerId === token ? false : true}
+            onClick={deleteEvent}
+          >
             Delete
           </button>
         </div>
