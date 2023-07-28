@@ -31,5 +31,3 @@ export type UserDto = {
   lastName: string;
   userRoles: string[];
 };
-
-// @RequestHeader("Authorization") String bearerToken

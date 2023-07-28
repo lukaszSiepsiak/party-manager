@@ -8,7 +8,7 @@ type JoinToEventFormProps = {
   closeForm?: () => void;
 };
 
-type JoinToEventFormDataType = {
+export type JoinToEventFormDataType = {
   id: string;
   email: string;
   password: string;

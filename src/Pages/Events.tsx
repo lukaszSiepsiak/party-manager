@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
-import SignUpForm from "../Components/Forms/SignUpForm";
-import SignInForm from "../Components/Forms/SignInForm";
-import JoinToEventForm from "../Components/Forms/JoinToEventForm";
+
+import JoinToEventForm, {
+  JoinToEventFormDataType,
+} from "../Components/Forms/JoinToEventForm";
 import AddEventForm, {
   AddEventFormDataType,
   AddEventFormParticipantsDataType,
@@ -11,7 +12,6 @@ import EventItem, {
   EventItemParticipantsType,
   EventItemPropsType,
 } from "../Components/EventItem/EventItem";
-
 import { EventDto, InvitationDto } from "../Dto/DtoProvider";
 import { post, _delete } from "../Api/axios";
 import { useAuth } from "../Context/Auth/AuthContextPovider";
@@ -33,6 +33,9 @@ const drawLotPictures = () => {
 const GET_EVENTS_URL = "/user-events";
 const ADD_EVENT_URL = "/event/add";
 const DELETE_EVENT_URL = "/delete";
+const JOIN_TO_EVENT_URL = "/join-to-the-event";
+const DRAW_LOT_EVENT_URL = "/draw";
+const GET_ALL_EVENT_PARTICIPANTS_URL = "/participants-by-event-id";
 
 const mockData: EventItemPropsType[] = [
   {
@@ -179,7 +182,7 @@ const Events: React.FC = () => {
   const [openParticipantsModal, setOpenParticipantsModal] =
     useState<boolean>(false);
 
-  const [events, setEvents] = useState<EventItemPropsType[]>(mockData);
+  const [events, setEvents] = useState<EventItemPropsType[]>([]);
   const [currentEventId, setCurrentEventId] = useState<string>("");
 
   //JOIN TO EVENT PART
@@ -187,8 +190,29 @@ const Events: React.FC = () => {
     setJoinToEventFormVisible((prevState) => !prevState);
   };
 
-  const sendJoinToEventButtonClicked = () => {
+  const sendJoinToEventButtonClicked = (data: JoinToEventFormDataType) => {
     //TODO: Joint to event request
+    const dataToSend: Map<string, string> = new Map();
+    dataToSend.set("eventID", data.id);
+    dataToSend.set("userEmail", data.email);
+    dataToSend.set("eventPassword", data.password);
+
+    try {
+      const joinToEvent = async () => {
+        await post(`${JOIN_TO_EVENT_URL}`, dataToSend)
+          .then((responseData) => {
+            if (responseData) {
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      };
+
+      joinToEvent();
+    } catch (error: unknown) {
+      console.log("error", error);
+    }
   };
 
   const closeJoinToEventButtonClicked = () => {
@@ -201,14 +225,6 @@ const Events: React.FC = () => {
   };
 
   const sendAddEventButtonClicked = (data: AddEventFormDataType) => {
-    //TODO: Add event request
-    // String name;
-    // LocalDate eventDate;
-    // Integer numberOfPeople;
-    // Integer budget;
-    // String currency;
-    // String organizerId; //ID zalogowanego użytkownika
-    // List<InvitationDto> listOfInvitationForEvent;
     const getParticipants = (
       participants: AddEventFormParticipantsDataType[]
     ): InvitationDto[] => {
@@ -226,28 +242,33 @@ const Events: React.FC = () => {
 
       return participantMembers;
     };
-    const dataToSend: EventDto = {
-      budget: data.budget,
-      currency: data.currency,
-      eventDate: new Date(data.date),
-      name: data.name,
-      numberOfPeople: data.peopleAmount,
-      organizerId: token,
-      listOfInvitationForEvent: getParticipants(data.participants),
-    };
 
-    const addEvents = async () => {
-      await post(`${ADD_EVENT_URL}/${token}`, dataToSend)
-        .then((responseData) => {
-          if (responseData) {
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
+    try {
+      const dataToSend: EventDto = {
+        budget: data.budget,
+        currency: data.currency,
+        eventDate: new Date(data.date),
+        name: data.name,
+        numberOfPeople: data.peopleAmount,
+        organizerId: token,
+        listOfInvitationForEvent: getParticipants(data.participants),
+      };
 
-    // addEvents();
+      const addEvents = async () => {
+        await post(`${ADD_EVENT_URL}/${token}`, dataToSend)
+          .then((responseData) => {
+            if (responseData) {
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      };
+
+      addEvents();
+    } catch (error: unknown) {
+      console.log("error", error);
+    }
   };
 
   const closeAddEventButtonClicked = () => {
@@ -284,10 +305,65 @@ const Events: React.FC = () => {
     if (id) {
       setCurrentEventId(id);
     }
+
+    try {
+      const getAllEventParticipants = async () => {
+        await post(
+          `${GET_ALL_EVENT_PARTICIPANTS_URL}/${currentEventId}/${token}`,
+          {}
+        )
+          .then((responseData: InvitationDto[]) => {
+            if (responseData) {
+              const participants: EventItemParticipantsType[] = [];
+
+              responseData.forEach((participantData) => {
+                const participant: EventItemParticipantsType = {
+                  participantName: participantData.participantName,
+                  participantSurname: participantData.participantSurname,
+                  participantEmail: participantData.participantEmail,
+                  takePartInInEvent: participantData.participantStatus,
+                };
+              });
+
+              const updatedEventsArray = events.map((event) => {
+                if (event.id === currentEventId) {
+                  event.participants = participants;
+                }
+
+                return event;
+              });
+
+              setEvents(updatedEventsArray);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      };
+
+      getAllEventParticipants();
+    } catch (error: unknown) {
+      console.log("error", error);
+    }
   };
 
   const drawLotsParticipants = () => {
-    //TODO: fetch request to draw lots participants
+    try {
+      const drawLotsEvents = async () => {
+        await post(`${DRAW_LOT_EVENT_URL}/${currentEventId}/${token}`, {})
+          .then((responseData) => {
+            if (responseData) {
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      };
+
+      drawLotsEvents();
+    } catch (error: unknown) {
+      console.log("error", error);
+    }
   };
 
   const closeParticipantsModalWindow = () => {
@@ -338,7 +414,6 @@ const Events: React.FC = () => {
   }, [events, token]);
 
   const getFlickingItems = () => {
-    //TODO: when fetch and setState, build EventItem and render it from state(events)
     return events.map((data, index) => {
       const {
         id,
