@@ -191,7 +191,6 @@ const Events: React.FC = () => {
   };
 
   const sendJoinToEventButtonClicked = (data: JoinToEventFormDataType) => {
-    //TODO: Joint to event request
     const dataToSend: Map<string, string> = new Map();
     dataToSend.set("eventID", data.id);
     dataToSend.set("userEmail", data.email);

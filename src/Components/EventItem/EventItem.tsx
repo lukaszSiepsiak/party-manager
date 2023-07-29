@@ -41,8 +41,6 @@ const EventItem = ({
   const { token } = useAuth();
 
   const deleteEvent = () => {
-    //TODO: fetch delete event and remove this from DOM
-    //TODO: if delete request is done -> delete from DOM
     if (deleteCallback) {
       deleteCallback(id);
     }
