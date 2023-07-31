@@ -13,7 +13,7 @@ import EventItem, {
   EventItemPropsType,
 } from "../Components/EventItem/EventItem";
 import { EventDto, InvitationDto } from "../Dto/DtoProvider";
-import { post, _delete } from "../Api/axios";
+import axiosInstance, { post, _delete, get } from "../Api/axios";
 import { useAuth } from "../Context/Auth/AuthContextPovider";
 
 import pic1 from "../Assets/pic1.jpg";
@@ -198,7 +198,7 @@ const Events: React.FC = () => {
 
     try {
       const joinToEvent = async () => {
-        await post(`${JOIN_TO_EVENT_URL}`, dataToSend)
+        await post(`${JOIN_TO_EVENT_URL}`, dataToSend, false, token)
           .then((responseData) => {
             if (responseData) {
             }
@@ -254,7 +254,7 @@ const Events: React.FC = () => {
       };
 
       const addEvents = async () => {
-        await post(`${ADD_EVENT_URL}/${token}`, dataToSend)
+        await post(`${ADD_EVENT_URL}/${token}`, dataToSend, false, token)
           .then((responseData) => {
             if (responseData) {
             }
@@ -309,7 +309,9 @@ const Events: React.FC = () => {
       const getAllEventParticipants = async () => {
         await post(
           `${GET_ALL_EVENT_PARTICIPANTS_URL}/${currentEventId}/${token}`,
-          {}
+          {},
+          false,
+          token
         )
           .then((responseData: InvitationDto[]) => {
             if (responseData) {
@@ -349,7 +351,12 @@ const Events: React.FC = () => {
   const drawLotsParticipants = () => {
     try {
       const drawLotsEvents = async () => {
-        await post(`${DRAW_LOT_EVENT_URL}/${currentEventId}/${token}`, {})
+        await post(
+          `${DRAW_LOT_EVENT_URL}/${currentEventId}/${token}`,
+          {},
+          false,
+          token
+        )
           .then((responseData) => {
             if (responseData) {
             }
@@ -376,7 +383,7 @@ const Events: React.FC = () => {
 
     try {
       const getEvents = async () => {
-        await post(`${GET_EVENTS_URL}/${token}`, dataToSend)
+        await get(`${GET_EVENTS_URL}/${token}`, token)
           .then((responseData: EventDto[]) => {
             if (responseData) {
               const eventItemData: EventItemPropsType[] = [];

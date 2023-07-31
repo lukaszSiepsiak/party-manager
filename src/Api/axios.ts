@@ -18,17 +18,34 @@ if (token) {
 
 const responseBody = (response: AxiosResponse) => response.data;
 
-export const get = (url: string) => axiosInstance.get(url).then(responseBody);
-
-export const post = (url: string, body: {}, withCredentials = false) =>
+export const get = (url: string, token?: string) =>
   axiosInstance
-    .post(url, body, { withCredentials: withCredentials })
+    .get(url, {
+      headers: { Authorization: token, "Content-Type": "application/json" },
+    })
+    .then(responseBody);
+
+export const post = (
+  url: string,
+  body: {},
+  withCredentials = false,
+  token?: string
+) =>
+  axiosInstance
+    .post(url, body, {
+      withCredentials: withCredentials,
+      headers: { Authorization: token, "Content-Type": "application/json" },
+    })
     .then(responseBody);
 
 export const put = (url: string, body: {}) =>
   axiosInstance.put(url, body).then(responseBody);
 
-export const _delete = (url: string) =>
-  axiosInstance.delete(url).then(responseBody);
+export const _delete = (url: string, token?: string) =>
+  axiosInstance
+    .delete(url, {
+      headers: { Authorization: token, "Content-Type": "application/json" },
+    })
+    .then(responseBody);
 
 export default axiosInstance;
