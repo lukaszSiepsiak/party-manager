@@ -377,10 +377,6 @@ const Events: React.FC = () => {
   };
 
   useEffect(() => {
-    const dataToSend: any = {
-      authorization: token,
-    };
-
     try {
       const getEvents = async () => {
         await get(`${GET_EVENTS_URL}/${token}`, token)
