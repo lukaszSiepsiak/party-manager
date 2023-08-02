@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { useAuth } from "../Context/Auth/AuthContextPovider";
 
 const BASE_URL = "http://localhost:8080";
 
@@ -10,18 +11,15 @@ const axiosInstance = axios.create({
   },
 });
 
-const token = localStorage.getItem("jwt");
-
-if (token) {
-  axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-}
-
 const responseBody = (response: AxiosResponse) => response.data;
 
 export const get = (url: string, token?: string) =>
   axiosInstance
     .get(url, {
-      headers: { Authorization: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     })
     .then(responseBody);
 
@@ -34,7 +32,10 @@ export const post = (
   axiosInstance
     .post(url, body, {
       withCredentials: withCredentials,
-      headers: { Authorization: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     })
     .then(responseBody);
 
@@ -44,7 +45,10 @@ export const put = (url: string, body: {}) =>
 export const _delete = (url: string, token?: string) =>
   axiosInstance
     .delete(url, {
-      headers: { Authorization: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     })
     .then(responseBody);
 
