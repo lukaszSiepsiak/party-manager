@@ -472,10 +472,10 @@ const Events: React.FC = () => {
   };
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 2,
+    slidesToShow: getFlickingItems().length > 2 ? 2 : getFlickingItems().length,
     slidesToScroll: 1,
   };
 
